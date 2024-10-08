@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SplashScreen from '../SplashScreen'; // Ensure this path is correct
-import WelcomeScreen from '../WelcomeScreen'; // Ensure this path is correct
-import SignUpScreen from '../SignUpScreen'; // Ensure this path is correct
-import SignInScreen from '../SignInScreen'; // Ensure this path is correct
+import SplashScreen from '@/components/SplashScreen'; // Ensure this path is correct
+import WelcomeScreen from '@/components/WelcomeScreen'; // Ensure this path is correct
+import SignUpScreen from '@/components/SignUpScreen'; // Ensure this path is correct
+import SignInScreen from '@/components/SignInScreen'; // Ensure this path is correct
 
 const Stack = createNativeStackNavigator();
 

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import '../firebaseConfig'; // Ensure this is the correct path
+import '@/firebaseConfig'; // Ensure this is the correct path
 
 // Define the types for your navigation
 type RootStackParamList = {
