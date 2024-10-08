@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
 
 // Define the types for your navigation
 type RootStackParamList = {
@@ -22,14 +21,18 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Welcome to HackHeaven!</Text>
-      <Button
-        title="Sign Up"
-        onPress={() => navigation.navigate('SignUp')} // Navigate to Sign Up screen
-      />
-      <Button
-        title="Log In"
-        onPress={() => navigation.navigate('SignIn')} // Navigate to Sign In screen
-      />
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Sign Up"
+          onPress={() => navigation.navigate('SignUp')} // Navigate to Sign Up screen
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Log In"
+          onPress={() => navigation.navigate('SignIn')} // Navigate to Sign In screen
+        />
+      </View>
     </View>
   );
 };
@@ -45,6 +48,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 30,
+  },
+  buttonContainer: {
+    width: '80%', 
+    marginVertical: 10, 
   },
 });
 

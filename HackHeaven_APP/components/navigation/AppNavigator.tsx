@@ -1,10 +1,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SplashScreen from '@/components/SplashScreen'; // Ensure this path is correct
-import WelcomeScreen from '@/components/WelcomeScreen'; // Ensure this path is correct
-import SignUpScreen from '@/components/SignUpScreen'; // Ensure this path is correct
-import SignInScreen from '@/components/SignInScreen'; // Ensure this path is correct
+import OnBoardScreen1 from '@/components/OnBoardScreen1'; 
+import OnBoardScreen2 from '@/components/OnBoardScreen2';
+import OnBoardScreen3 from '@/components/OnBoardScreen3';
+import WelcomeScreen from '@/components/WelcomeScreen'; 
+import SignUpScreen from '@/components/SignUpScreen'; 
+import SignInScreen from '@/components/SignInScreen'; 
 
 const Stack = createNativeStackNavigator();
 
@@ -13,12 +15,22 @@ const AppNavigator: React.FC = () => {
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
-          name="Splash"
-          component={SplashScreen}
+          name="OnBoardScreen1"
+          component={OnBoardScreen1}
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen
+          name="OnBoardScreen2"
+          component={OnBoardScreen2}
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen
+          name="OnBoardScreen3"
+          component={OnBoardScreen3}
           options={{ headerShown: false }} 
         />
         <Stack.Screen 
-          name="Welcome" 
+          name="WelcomeScreen" 
           component={WelcomeScreen} 
           options={{ title: 'Welcome' }}
         />
