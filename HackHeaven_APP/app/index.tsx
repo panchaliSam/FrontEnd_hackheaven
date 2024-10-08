@@ -133,7 +133,7 @@ import { View, StyleSheet } from 'react-native'; // Import View and StyleSheet
 import { registerRootComponent } from 'expo';
 import AppNavigator from '../components/navigation/AppNavigator'; // Adjust path as needed
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <View style={styles.container}> {/* Wrap AppNavigator in View */}
       <AppNavigator />
@@ -155,6 +155,3 @@ const styles = StyleSheet.create({
 registerRootComponent(App);
 
 export default App;
-
-
-

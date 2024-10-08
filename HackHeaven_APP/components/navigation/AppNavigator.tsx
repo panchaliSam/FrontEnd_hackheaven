@@ -8,9 +8,9 @@ import SignInScreen from '../SignInScreen'; // Ensure this path is correct
 
 const Stack = createNativeStackNavigator();
 
-const AppNavigator = () => {
+const AppNavigator: React.FC = () => {
   return (
-    <NavigationContainer independent={true}> 
+    <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
           name="Splash"

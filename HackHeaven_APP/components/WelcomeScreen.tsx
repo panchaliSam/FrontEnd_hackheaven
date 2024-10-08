@@ -1,7 +1,24 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 
-const WelcomeScreen = ({ navigation }) => {
+// Define the types for your navigation
+type RootStackParamList = {
+  SignUp: undefined;
+  SignIn: undefined;
+};
+
+type WelcomeScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'SignUp' | 'SignIn'
+>;
+
+type WelcomeScreenProps = {
+  navigation: WelcomeScreenNavigationProp;
+};
+
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Welcome to HackHeaven!</Text>
