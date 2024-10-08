@@ -1,9 +1,16 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const SplashScreen = ({ navigation }) => {
+// Define the props type for the SplashScreen component
+interface SplashScreenProps {
+  navigation: {
+    replace: (screen: string) => void;
+  };
+}
+
+const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
   useEffect(() => {
-    // Navigate to Welcome screen after 2 seconds
+    // Navigate to the Welcome screen after 2 seconds
     const timer = setTimeout(() => {
       navigation.replace('Welcome'); // Use replace to remove Splash from stack
     }, 2000);

@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import '../firebaseConfig'; // Ensure this is the correct path
 
-const SignInScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+// Define the types for your navigation
+type RootStackParamList = {
+  SignUp: undefined;
+  Main: undefined;
+};
+
+type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp' | 'Main'>;
+
+type SignInScreenProps = {
+  navigation: SignInScreenNavigationProp;
+};
+
+const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const auth = getAuth();
 
   const handleSignIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login Successful', 'Welcome back!');
-      // Navigate to the main application screen after login
-      // navigation.navigate('Main'); // Uncomment and set up a main screen if needed
-    } catch (error) {
+      // Uncomment and set up a main screen if needed
+      // navigation.navigate('Main');
+    } catch (error: any) {
       Alert.alert('Login Failed', error.message);
     }
   };

@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, AuthError } from 'firebase/auth';
 import '../firebaseConfig'; // Ensure this is the correct path
 
-const SignUpScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [profileImage, setProfileImage] = useState(''); // Added for profile image
+// Define the props type for the SignUpScreen component
+interface SignUpScreenProps {
+  navigation: {
+    navigate: (screen: string) => void;
+  };
+}
+
+const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [profileImage, setProfileImage] = useState<string>(''); // Added for profile image
   const auth = getAuth();
 
   // Function to store user in the database
-  const storeUserInDatabase = async (email, profileImage, token) => {
+  const storeUserInDatabase = async (email: string, profileImage: string, token: string) => {
     try {
       const response = await fetch('http://localhost:4003/api/user/add', {
         method: 'POST',
@@ -39,15 +46,23 @@ const SignUpScreen = ({ navigation }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      const token = await user.getIdToken(); // Get the user's ID token
-      
-      // Store user in backend after signup
-      await storeUserInDatabase(user.email, profileImage, token);
 
-      Alert.alert('Sign Up Successful', 'You can now log in!');
-      navigation.navigate('SignIn'); // Navigate to Sign In screen
+      // Get the token
+      const token = await user.getIdToken();
+
+      // Ensure token is not null and is a string
+      if (token) {
+        // Store user in backend after signup
+        await storeUserInDatabase(user.email, profileImage, token);
+
+        Alert.alert('Sign Up Successful', 'You can now log in!');
+        navigation.navigate('SignIn'); // Navigate to Sign In screen
+      } else {
+        Alert.alert('Failed to get user token.');
+      }
     } catch (error) {
-      Alert.alert('Sign Up Failed', error.message);
+      const firebaseError = error as AuthError; // Cast error to AuthError
+      Alert.alert('Sign Up Failed', firebaseError.message); // Access the message property
     }
   };
 
