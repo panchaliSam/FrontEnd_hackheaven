@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, AuthError } from 'firebase/auth';
-import '../firebaseConfig'; // Ensure this is the correct path
+import '@/firebaseConfig'; // Ensure this is the correct path
 
 // Define the props type for the SignUpScreen component
 interface SignUpScreenProps {
