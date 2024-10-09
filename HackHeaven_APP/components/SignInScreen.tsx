@@ -9,10 +9,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Define the types for your navigation
 type RootStackParamList = {
   SignUp: undefined;
-  HomeScreen: { user_token: string, email: string }; // Pass email along with user_token
+  Home: { user_token: string, email: string }; // Pass email along with user_token
 };
 
-type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp' | 'HomeScreen'>;
+type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp' | 'Home'>;
 
 type SignInScreenProps = {
   navigation: SignInScreenNavigationProp;
@@ -23,26 +23,26 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState<string>('');
   const auth = getAuth();
 
-  const handleSignIn = async () => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-  
-      // Retrieve the user token
-      const userToken = await user.getIdToken(); // Get the user token
-  
-      // Save the user's email to AsyncStorage
-      await AsyncStorage.setItem('userEmail', user.email || '');
-  
-      Alert.alert('Login Successful', 'Welcome back!');
-  
-      // Navigate to the HomeScreen and pass the user_token and email
-      navigation.navigate('HomeScreen', { user_token: userToken, email: user.email || '' });
-    } catch (error: any) {
-      Alert.alert('Login Failed', error.message);
-    }
-  };
-  
+const handleSignIn = async () => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Retrieve the user token
+    const userToken = await user.getIdToken(); // Get the user token
+
+    // Save the user's email to AsyncStorage
+    await AsyncStorage.setItem('userEmail', user.email || '');
+
+    Alert.alert('Login Successful', 'Welcome back!');
+
+    // Navigate to the Home and pass the user_token and email
+    navigation.navigate('Home', { user_token: userToken, email: user.email || '' });
+  } catch (error: any) {
+    Alert.alert('Login Failed', error.message);
+  }
+};
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Log In</Text>

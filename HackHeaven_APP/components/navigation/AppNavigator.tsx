@@ -8,14 +8,15 @@ import WelcomeScreen from '@/components/WelcomeScreen';
 import SignUpScreen from '@/components/SignUpScreen'; 
 import SignInScreen from '@/components/SignInScreen'; 
 import ProfileScreen from '@/components/ProfileScreen';
-import HomeScreen from '@/components/HomeScreen';
+// import HomeScreen from '@/components/HomeScreen';
+import BottomTabNavigator from './BottomTabNavigator'; 
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="Splash">
+      <Stack.Navigator initialRouteName="OnBoardScreen1">
         <Stack.Screen
           name="OnBoardScreen1"
           component={OnBoardScreen1}
@@ -38,7 +39,16 @@ const AppNavigator: React.FC = () => {
         />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        
+        {/* Add the Bottom Tab Navigator instead of HomeScreen */}
+        <Stack.Screen 
+          name="Home" 
+          component={BottomTabNavigator} // This will load the bottom navigation
+          options={{ headerShown: false }} // You can hide the header if desired
+        />
+
+        {/* <Stack.Screen name="HomeScreen" component={HomeScreen} /> */}
+
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
