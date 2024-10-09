@@ -8,10 +8,10 @@ import '@/firebaseConfig'; // Ensure this is the correct path
 // Define the types for your navigation
 type RootStackParamList = {
   SignUp: undefined;
-  Main: undefined;
+  ProfileScreen: { user_token: string }; // Update to accept user_token as a parameter
 };
 
-type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp' | 'Main'>;
+type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp' | 'ProfileScreen'>;
 
 type SignInScreenProps = {
   navigation: SignInScreenNavigationProp;
@@ -24,10 +24,16 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
 
   const handleSignIn = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Retrieve the user token
+      const userToken = await user.getIdToken(); // Get the user token
+
       Alert.alert('Login Successful', 'Welcome back!');
-      // Uncomment and set up a main screen if needed
-      // navigation.navigate('Main');
+      
+      // Navigate to the ProfileScreen and pass the user_token
+      navigation.navigate('ProfileScreen', { user_token: userToken });
     } catch (error: any) {
       Alert.alert('Login Failed', error.message);
     }
