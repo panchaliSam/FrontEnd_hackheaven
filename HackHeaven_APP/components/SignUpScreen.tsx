@@ -53,7 +53,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
       // Ensure token is not null and is a string
       if (token) {
         // Store user in backend after signup
-        await storeUserInDatabase(user.email, profileImage, token);
+        await storeUserInDatabase(user.email, token);
 
         Alert.alert('Sign Up Successful', 'You can now log in!');
         navigation.navigate('SignIn'); // Navigate to Sign In screen
@@ -83,13 +83,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
         onChangeText={setPassword}
         value={password}
         secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Profile Image URL" // Added profile image input
-        onChangeText={setProfileImage}
-        value={profileImage}
-      />
+      /> 
       <Button title="Sign Up" onPress={handleSignUp} />
     </View>
   );
