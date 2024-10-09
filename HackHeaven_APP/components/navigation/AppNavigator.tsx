@@ -7,7 +7,8 @@ import OnBoardScreen3 from '@/components/OnBoardScreen3';
 import WelcomeScreen from '@/components/WelcomeScreen'; 
 import SignUpScreen from '@/components/SignUpScreen'; 
 import SignInScreen from '@/components/SignInScreen'; 
-import ProfileScreen from '@/components/ProfileScreen'
+import ProfileScreen from '@/components/ProfileScreen';
+import HomeScreen from '@/components/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,7 @@ const AppNavigator: React.FC = () => {
         />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>

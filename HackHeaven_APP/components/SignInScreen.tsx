@@ -4,14 +4,15 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import '@/firebaseConfig'; // Ensure this is the correct path
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define the types for your navigation
 type RootStackParamList = {
   SignUp: undefined;
-  ProfileScreen: { user_token: string }; // Update to accept user_token as a parameter
+  HomeScreen: { user_token: string, email: string }; // Pass email along with user_token
 };
 
-type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp' | 'ProfileScreen'>;
+type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp' | 'HomeScreen'>;
 
 type SignInScreenProps = {
   navigation: SignInScreenNavigationProp;
@@ -26,19 +27,22 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
+  
       // Retrieve the user token
       const userToken = await user.getIdToken(); // Get the user token
-
+  
+      // Save the user's email to AsyncStorage
+      await AsyncStorage.setItem('userEmail', user.email || '');
+  
       Alert.alert('Login Successful', 'Welcome back!');
-      
-      // Navigate to the ProfileScreen and pass the user_token
-      navigation.navigate('ProfileScreen', { user_token: userToken });
+  
+      // Navigate to the HomeScreen and pass the user_token and email
+      navigation.navigate('HomeScreen', { user_token: userToken, email: user.email || '' });
     } catch (error: any) {
       Alert.alert('Login Failed', error.message);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Log In</Text>
