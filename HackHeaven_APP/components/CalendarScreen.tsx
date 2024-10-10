@@ -36,7 +36,6 @@ const CalendarScreen: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <IconButton icon="menu" onPress={() => { /* Open drawer */ }} />
         <Title style={styles.headerTitle}>Calendar</Title>
         <Image
           source={{ uri: 'https://i.imgur.com/your-profile-image.png' }} // Ensure this image URL is valid

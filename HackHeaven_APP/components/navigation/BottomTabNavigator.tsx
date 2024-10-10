@@ -27,14 +27,14 @@ const BottomTabNavigator: React.FC = () => {
 
           return <Ionicons name={iconName as any} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
+        tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Saved" component={SavedScreen} />
-      <Tab.Screen name="Calendar" component={CalendarScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Search" component={SearchScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Saved" component={SavedScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 };
