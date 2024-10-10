@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, Image } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Card, Title, Paragraph, Button, IconButton } from 'react-native-paper';
 
+// Define the events array
 const events = [
   {
     id: 1,
@@ -13,14 +14,14 @@ const events = [
   },
   {
     id: 2,
-    title: 'hackX',
+    title: 'HackX',
     organizer: 'By UOK',
     time: '10:00 - 13:00',
     date: '2021-09-02',
   },
 ];
 
-// Define the day structure
+// Define the day structure for TypeScript
 interface Day {
   dateString: string;
   day: number;
@@ -35,10 +36,9 @@ const CalendarScreen: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <IconButton icon="menu" onPress={() => { /* Open drawer */ }} />
         <Title style={styles.headerTitle}>Calendar</Title>
         <Image
-          source={{ uri: 'https://i.imgur.com/your-profile-image.png' }}
+          source={{ uri: 'https://i.imgur.com/your-profile-image.png' }} // Ensure this image URL is valid
           style={styles.profileImage}
         />
       </View>
@@ -46,7 +46,7 @@ const CalendarScreen: React.FC = () => {
       <Calendar
         onDayPress={(day: Day) => setSelectedDate(day.dateString)}
         markedDates={{
-          '2021-09-02': { selected: true, marked: true, selectedColor: '#00adf5' },
+          [selectedDate]: { selected: true, marked: true, selectedColor: '#00adf5' }, // Mark the selected date dynamically
         }}
         theme={{
           selectedDayBackgroundColor: '#00adf5',
@@ -66,8 +66,8 @@ const CalendarScreen: React.FC = () => {
                 <Paragraph>{event.organizer}</Paragraph>
               </Card.Content>
               <Card.Actions>
-                <Button>View</Button>
-                <IconButton icon="eye" onPress={() => { /* View event */ }} />
+                <Button onPress={() => { /* Handle view event action */ }}>View</Button>
+                <IconButton icon="eye" onPress={() => { /* Handle view event action */ }} />
               </Card.Actions>
             </Card>
           ))}

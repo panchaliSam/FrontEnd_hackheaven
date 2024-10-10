@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer'; // Import Drawer Navigator
 import OnBoardScreen1 from '@/components/OnBoardScreen1'; 
 import OnBoardScreen2 from '@/components/OnBoardScreen2';
 import OnBoardScreen3 from '@/components/OnBoardScreen3';
@@ -8,14 +9,16 @@ import WelcomeScreen from '@/components/WelcomeScreen';
 import SignUpScreen from '@/components/SignUpScreen'; 
 import SignInScreen from '@/components/SignInScreen'; 
 import ProfileScreen from '@/components/ProfileScreen';
-import HomeScreen from '@/components/HomeScreen';
+import BottomTabNavigator from './BottomTabNavigator'; 
+import Sidebar from '@/components/Sidebar'; // Import your Sidebar component
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator(); // Create Drawer Navigator
 
 const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="Splash">
+      <Stack.Navigator initialRouteName="OnBoardScreen1">
         <Stack.Screen
           name="OnBoardScreen1"
           component={OnBoardScreen1}
@@ -38,10 +41,25 @@ const AppNavigator: React.FC = () => {
         />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        
+        {/* Drawer Navigation for Home and other screens */}
+        <Stack.Screen name="Main" component={MainDrawerNavigator} options={{ headerShown: false }} />
+        
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+  );
+};
+
+// Create the main drawer navigator
+const MainDrawerNavigator = () => {
+  return (
+    <Drawer.Navigator drawerContent={(props) => <Sidebar {...props} />}>
+      <Drawer.Screen name="Menu" component={BottomTabNavigator} />
+      {/* Add more screens to the drawer if needed */}
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      {/* Additional screens can be added here */}
+    </Drawer.Navigator>
   );
 };
 
