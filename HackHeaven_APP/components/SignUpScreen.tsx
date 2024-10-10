@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Alert, TouchableOpacity, Image } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, AuthError } from 'firebase/auth';
 import '@/firebaseConfig'; // Ensure this is the correct path
+import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon component
 
 // Define the props type for the SignUpScreen component
 interface SignUpScreenProps {
@@ -13,7 +14,7 @@ interface SignUpScreenProps {
 const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [profileImage, setProfileImage] = useState<string>(''); // Added for profile image
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false); // Add state to toggle password visibility
   const auth = getAuth();
 
   // Function to store user in the database
@@ -68,7 +69,12 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create an Account</Text>
+            <Image
+        source={{
+          uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FSignUp.jpg?alt=media&token=bd2b7a4d-20a4-47d9-80ca-b3ce3044835a', // Replace with your actual image URI
+        }}
+        style={styles.signUpImage}
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -77,14 +83,25 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry
-      /> 
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Password"
+          onChangeText={setPassword}
+          value={password}
+          secureTextEntry={!isPasswordVisible} // Toggle based on isPasswordVisible state
+        />
+        <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+          <Icon name={isPasswordVisible ? 'eye-off' : 'eye'} size={24} color="gray" />
+        </TouchableOpacity>
+      </View>
+
       <Button title="Sign Up" onPress={handleSignUp} />
+
+      {/* Already have an account section */}
+      <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+        <Text style={styles.link}>Already have an account? Log In</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -102,12 +119,34 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  signUpImage: {
+    width: 300,
+    height: 200,
+    marginBottom: 20,
+  },
   input: {
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 15,
     paddingHorizontal: 10,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 40,
+  },
+  link: {
+    marginTop: 15,
+    textAlign: 'center',
+    color: '#007BFF',
   },
 });
 

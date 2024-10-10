@@ -58,9 +58,9 @@ const HomeScreen: React.FC = () => {
         <ScrollView contentContainerStyle={styles.container}>
             {/* Header section */}
             <View style={styles.header}>
-                <TouchableOpacity style={styles.menuButton}>
+                {/* <TouchableOpacity style={styles.menuButton}>
                     <Text style={styles.menuText}>☰</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <Text style={styles.title}>Home</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { user_token, email })}>
                     <Image
@@ -77,7 +77,12 @@ const HomeScreen: React.FC = () => {
                     style={styles.card}
                     onPress={() => navigation.navigate('Hackathons')}
                 >
-                    <View style={styles.placeholderImage} />
+                    <Image
+                        source={{
+                            uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FHackathon.jpg?alt=media&token=6b8e9b2d-4358-4531-9c0f-16ffe1c6afad',
+                        }}
+                        style={styles.innovatorImage}
+                    />
                     <Text style={styles.cardTitle}>Hackathons</Text>
                 </TouchableOpacity>
 
@@ -86,7 +91,12 @@ const HomeScreen: React.FC = () => {
                     style={styles.card}
                     onPress={() => navigation.navigate('Sponsors')}
                 >
-                    <View style={styles.placeholderImage} />
+                    <Image
+                        source={{
+                            uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FSponsor.png?alt=media&token=d5736315-e126-4ecb-a6ef-67bd8ddfdf7b',
+                        }}
+                        style={styles.innovatorImage}
+                    />
                     <Text style={styles.cardTitle}>Sponsors</Text>
                 </TouchableOpacity>
 
@@ -95,7 +105,12 @@ const HomeScreen: React.FC = () => {
                     style={styles.card}
                     onPress={() => navigation.navigate('Organizer')}
                 >
-                    <View style={styles.placeholderImage} />
+                    <Image
+                        source={{
+                            uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FOrganizer.png?alt=media&token=390c8424-1d71-49eb-aedd-d467c4f82ec4',
+                        }}
+                        style={styles.innovatorImage}
+                    />
                     <Text style={styles.cardTitle}>Organizer</Text>
                 </TouchableOpacity>
 
@@ -106,7 +121,7 @@ const HomeScreen: React.FC = () => {
                 >
                     <Image
                         source={{
-                            uri: 'https://path-to-innovator-image.png',
+                            uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FInnovator.png?alt=media&token=ccaf6f00-9493-42a9-afca-7a81d2f93643',
                         }}
                         style={styles.innovatorImage}
                     />
