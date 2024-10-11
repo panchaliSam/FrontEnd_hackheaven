@@ -11,6 +11,9 @@ import SignInScreen from '@/components/SignInScreen';
 import ProfileScreen from '@/components/ProfileScreen';
 import BottomTabNavigator from './BottomTabNavigator'; 
 import Sidebar from '@/components/Sidebar'; // Import your Sidebar component
+import OrganizerDashboard from '@/components/OrganizerDashboard'; // Import your Sidebar component
+import RegisterOrganizerScreen from '@/components/RegisterOrganizerScreen'; // Import your Sidebar component
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator(); // Create Drawer Navigator
@@ -46,6 +49,10 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen name="Main" component={MainDrawerNavigator} options={{ headerShown: false }} />
         
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+        <Stack.Screen name="Organizer" component={OrganizerDashboard} />
+        <Stack.Screen name="AddEvent" component={RegisterOrganizerScreen} />
+
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
