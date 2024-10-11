@@ -17,6 +17,8 @@ import AddSponsorScreen from '@/components/AddSponsorScreen';
 import InnovatorScreen from '@/components/InnovatorScreen';
 import AddInnovatorScreen from '@/components/AddInnovatorScreen';
 import OrganizerScreen from '@/components/OrganizerScreen';
+import ChatScreen from '@/components/ChatScreen';
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator(); // Create Drawer Navigator
@@ -58,6 +60,7 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen name="Innovators" component={InnovatorScreen} />
         <Stack.Screen name="AddInnovator" component={AddInnovatorScreen} />
         <Stack.Screen name="Organizer" component={OrganizerScreen} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
