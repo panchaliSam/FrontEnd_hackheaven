@@ -14,34 +14,8 @@ interface SignUpScreenProps {
 const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false); // Add state to toggle password visibility
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const auth = getAuth();
-
-  // Function to store user in the database
-  const storeUserInDatabase = async (email: string, profileImage: string, token: string) => {
-    try {
-      const response = await fetch('http://localhost:4003/api/user/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          profileImage,
-          user_token: token,
-        }),
-      });
-      const data = await response.json();
-      if (data.userId) {
-        Alert.alert('User stored successfully!');
-      } else {
-        Alert.alert('Failed to store user data.');
-      }
-    } catch (error) {
-      console.error('Error storing user data:', error);
-      Alert.alert('An error occurred while storing user data.');
-    }
-  };
 
   const handleSignUp = async () => {
     try {
@@ -51,25 +25,23 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
       // Get the token
       const token = await user.getIdToken();
 
-      // Ensure token is not null and is a string
+      // Ensure token is valid
       if (token) {
-        // Store user in backend after signup
-        await storeUserInDatabase(user.email, token);
-
+        // Since we're removing the backend storage, you can alert success here
         Alert.alert('Sign Up Successful', 'You can now log in!');
         navigation.navigate('SignIn'); // Navigate to Sign In screen
       } else {
         Alert.alert('Failed to get user token.');
       }
     } catch (error) {
-      const firebaseError = error as AuthError; // Cast error to AuthError
-      Alert.alert('Sign Up Failed', firebaseError.message); // Access the message property
+      const firebaseError = error as AuthError;
+      Alert.alert('Sign Up Failed', firebaseError.message);
     }
   };
 
   return (
     <View style={styles.container}>
-            <Image
+      <Image
         source={{
           uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FSignUp.jpg?alt=media&token=bd2b7a4d-20a4-47d9-80ca-b3ce3044835a', // Replace with your actual image URI
         }}
@@ -89,7 +61,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           placeholder="Password"
           onChangeText={setPassword}
           value={password}
-          secureTextEntry={!isPasswordVisible} // Toggle based on isPasswordVisible state
+          secureTextEntry={!isPasswordVisible}
         />
         <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
           <Icon name={isPasswordVisible ? 'eye-off' : 'eye'} size={24} color="gray" />

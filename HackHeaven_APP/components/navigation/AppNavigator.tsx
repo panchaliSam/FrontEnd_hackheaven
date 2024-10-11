@@ -10,7 +10,12 @@ import SignUpScreen from '@/components/SignUpScreen';
 import SignInScreen from '@/components/SignInScreen'; 
 import ProfileScreen from '@/components/ProfileScreen';
 import BottomTabNavigator from './BottomTabNavigator'; 
-import Sidebar from '@/components/Sidebar'; // Import your Sidebar component
+import Sidebar from '@/components/Sidebar'; 
+import HackathonScreen from '@/components/HackathonScreen';
+import SponsorScreen from '@/components/SponsorScreen';
+import AddSponsorScreen from '@/components/AddSponsorScreen';
+import InnovatorScreen from '@/components/InnovatorScreen';
+import AddInnovatorScreen from '@/components/AddInnovatorScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator(); // Create Drawer Navigator
@@ -46,6 +51,11 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen name="Main" component={MainDrawerNavigator} options={{ headerShown: false }} />
         
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+        <Stack.Screen name="Hackathons" component={HackathonScreen} />
+        <Stack.Screen name="Sponsors" component={SponsorScreen} />
+        <Stack.Screen name="AddSponsor" component={AddSponsorScreen} />
+        <Stack.Screen name="Innovators" component={InnovatorScreen} />
+        <Stack.Screen name="AddInnovator" component={AddInnovatorScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
