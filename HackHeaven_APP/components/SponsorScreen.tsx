@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-import { getAuth } from 'firebase/auth'; // Import Firebase Auth
+import { getAuth } from 'firebase/auth'; 
+import { Picker } from '@react-native-picker/picker'; // Import Picker
 
 interface Sponsor {
   sponsor_id: number;
@@ -22,7 +23,7 @@ interface Sponsor {
   contact_no: string;
   country: string;
   category: string;
-  logo: string; // Added logo field
+  logo: string; 
 }
 
 // Define colors for sponsor categories
@@ -38,7 +39,8 @@ const SponsorScreen: React.FC = () => {
   const navigation = useNavigation();
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const auth = getAuth(); // Initialize Firebase Auth
+  const [selectedCategory, setSelectedCategory] = useState<string>('All'); // State for selected category
+  const auth = getAuth(); 
 
   const handleAddSponsor = () => {
     navigation.navigate('AddSponsor');
@@ -50,14 +52,13 @@ const SponsorScreen: React.FC = () => {
 
   const fetchSponsors = async () => {
     try {
-      // Get the current user's ID token
       const user = auth.currentUser;
-      const accessToken = await user?.getIdToken(); // This returns a promise
+      const accessToken = await user?.getIdToken(); 
 
       const response = await fetch('http://192.168.1.9:4003/api/sponsor/select-sponsors', {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${accessToken}`, // Set the Authorization header
+          Authorization: `Bearer ${accessToken}`, 
         },
       });
 
@@ -94,7 +95,7 @@ const SponsorScreen: React.FC = () => {
   };
 
   const renderSponsorItem = ({ item }: { item: Sponsor }) => {
-    const categoryColor = sponsorCategoryColors[item.category] || '#6c757d'; // Default color for unknown categories
+    const categoryColor = sponsorCategoryColors[item.category] || '#6c757d';
 
     return (
       <View style={styles.sponsorItem}>
@@ -104,7 +105,7 @@ const SponsorScreen: React.FC = () => {
 
         <Image
           source={{
-            uri: item.logo || 'https://example.com/default-sponsor-image.png', // Use logo field, fallback to a default image
+            uri: item.logo || 'https://example.com/default-sponsor-image.png',
           }}
           style={styles.sponsorImage}
           resizeMode="cover"
@@ -133,6 +134,14 @@ const SponsorScreen: React.FC = () => {
     );
   };
 
+  // Get unique categories for the dropdown
+  const uniqueCategories = Array.from(new Set(sponsors.map(sponsor => sponsor.category)));
+
+  // Filter sponsors based on selected category
+  const filteredSponsors = selectedCategory === 'All'
+    ? sponsors
+    : sponsors.filter(sponsor => sponsor.category === selectedCategory);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -140,13 +149,30 @@ const SponsorScreen: React.FC = () => {
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
+      
+      <View style={styles.filterContainer}>
+        <Picker
+          selectedValue={selectedCategory}
+          onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="All" value="All" />
+          <Picker.Item label="Technical" value="Technical" />
+          <Picker.Item label="Media" value="Media" />
+          <Picker.Item label="Beverage" value="Beverage" />
+          <Picker.Item label="Finance" value="Finance" />
+          <Picker.Item label="Education" value="Education" />
+          <Picker.Item label="Other" value="Other" />
+        </Picker>
+      </View>
+
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
-      ) : sponsors.length === 0 ? (
+      ) : filteredSponsors.length === 0 ? (
         <Text style={styles.noSponsorsText}>No sponsors available</Text>
       ) : (
         <FlatList
-          data={sponsors}
+          data={filteredSponsors}
           keyExtractor={(item) => item.sponsor_id.toString()}
           renderItem={renderSponsorItem}
           contentContainerStyle={styles.list}
@@ -245,6 +271,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
     marginTop: 20,
+  },
+  filterContainer: {
+    marginVertical: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  picker: {
+    height: 50,
+    width: '100%',
   },
 });
 

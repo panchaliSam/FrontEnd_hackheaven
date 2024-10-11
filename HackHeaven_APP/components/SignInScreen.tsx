@@ -6,11 +6,12 @@ import { RouteProp } from '@react-navigation/native';
 import '@/firebaseConfig'; // Ensure this is the correct path
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon component
+import Sidebar from './Sidebar'; // Import the Sidebar component
 
 // Define the types for your navigation
 type RootStackParamList = {
   SignUp: undefined;
-  Main: { user_token: string; email: string }; // Update to navigate to Main
+  Main: { user_token: string; email: string; profileImage: string | null }; // Updated to include profile image
 };
 
 type SignInScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp' | 'Main'>;
@@ -36,10 +37,17 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
       // Save the user's email to AsyncStorage
       await AsyncStorage.setItem('userEmail', user.email || '');
 
+      // Optionally, retrieve the user's profile image from your user database or use a placeholder
+      const profileImage = user.photoURL || 'https://path-to-default-profile-image.png'; // Placeholder for profile image
+
       Alert.alert('Login Successful', 'Welcome back!');
 
-      // Navigate to the Main screen and pass the user_token and email
-      navigation.navigate('Main', { user_token: userToken, email: user.email || '' });
+      // Navigate to the Main screen and pass the user_token, email, and profileImage
+      navigation.navigate('Main', {
+        user_token: userToken,
+        email: user.email || '',
+        profileImage,
+      });
     } catch (error: any) {
       Alert.alert('Login Failed', error.message);
     }
@@ -61,7 +69,6 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>Log In</Text> */}
       <Image
         source={{
           uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FLogIn.jpg?alt=media&token=d633dc40-f08d-424a-8823-53f652453428', // Replace with your actual image URI

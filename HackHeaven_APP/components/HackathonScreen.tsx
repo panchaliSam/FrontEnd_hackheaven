@@ -12,7 +12,8 @@ import {
   Linking,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker'; // Import the Picker component
 
 interface Hackathon {
   hackathon_id: number;
@@ -39,12 +40,22 @@ const hackathonTypeColors: Record<string, string> = {
 const HackathonScreen: React.FC = () => {
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [savedHackathonIds, setSavedHackathonIds] = useState<number[]>([]); // Track saved hackathons
+  const [savedHackathonIds, setSavedHackathonIds] = useState<number[]>([]);
+  const [selectedType, setSelectedType] = useState<string>('All'); // State for selected hackathon type
+  const [filteredHackathons, setFilteredHackathons] = useState<Hackathon[]>([]); // State for filtered hackathons
 
   useEffect(() => {
     fetchHackathons();
-    loadSavedHackathons(); // Load saved hackathons on component mount
+    loadSavedHackathons();
   }, []);
+
+  useEffect(() => {
+    if (selectedType === 'All') {
+      setFilteredHackathons(hackathons);
+    } else {
+      setFilteredHackathons(hackathons.filter(hackathon => hackathon.hackathon_type === selectedType));
+    }
+  }, [hackathons, selectedType]); // Update filtered hackathons when hackathons or selectedType changes
 
   const fetchHackathons = async () => {
     try {
@@ -52,6 +63,7 @@ const HackathonScreen: React.FC = () => {
       const data = await response.json();
       if (response.ok) {
         setHackathons(data.hackathons);
+        setFilteredHackathons(data.hackathons); // Initialize filtered hackathons
       } else {
         Alert.alert('Error', data.error || 'Failed to fetch hackathons');
       }
@@ -67,7 +79,7 @@ const HackathonScreen: React.FC = () => {
     try {
       const savedHackathons = await AsyncStorage.getItem('savedHackathons');
       const savedData = savedHackathons ? JSON.parse(savedHackathons) : [];
-      setSavedHackathonIds(savedData.map((hackathon: Hackathon) => hackathon.hackathon_id)); // Load saved hackathon IDs
+      setSavedHackathonIds(savedData.map((hackathon: Hackathon) => hackathon.hackathon_id));
     } catch (error) {
       console.error('Error loading saved hackathons:', error);
     }
@@ -91,17 +103,15 @@ const HackathonScreen: React.FC = () => {
 
       let updatedData;
       if (isSaved) {
-        // Remove from saved
         updatedData = savedData.filter((savedHackathon: Hackathon) => savedHackathon.hackathon_id !== hackathon.hackathon_id);
         Alert.alert('Success', 'Hackathon removed from saved!');
       } else {
-        // Add to saved
         updatedData = [...savedData, hackathon];
         Alert.alert('Success', 'Hackathon saved!');
       }
 
       await AsyncStorage.setItem('savedHackathons', JSON.stringify(updatedData));
-      setSavedHackathonIds(updatedData.map((h: Hackathon) => h.hackathon_id)); // Update saved hackathon IDs
+      setSavedHackathonIds(updatedData.map((h: Hackathon) => h.hackathon_id));
     } catch (error) {
       console.error('Error saving hackathon:', error);
       Alert.alert('Error', 'An error occurred while saving the hackathon.');
@@ -139,7 +149,7 @@ const HackathonScreen: React.FC = () => {
     };
     const formattedDate = eventDate.toLocaleDateString('en-US', options).replace(',', '');
 
-    const isSaved = savedHackathonIds.includes(item.hackathon_id); // Check if hackathon is saved
+    const isSaved = savedHackathonIds.includes(item.hackathon_id);
 
     return (
       <View style={styles.hackathonItem}>
@@ -211,15 +221,29 @@ const HackathonScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
+      <View style={styles.filterContainer}>
+        <Picker
+          selectedValue={selectedType}
+          onValueChange={(itemValue) => setSelectedType(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="All" value="All" />
+          <Picker.Item label="Technology" value="Technology" />
+          <Picker.Item label="Business" value="Business" />
+          <Picker.Item label="Coding" value="Coding" />
+          <Picker.Item label="Gaming" value="Gaming" />
+          <Picker.Item label="Innovation" value="Innovation" />
+          <Picker.Item label="Other" value="Other" />
+        </Picker>
+      </View>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#007BFF" />
       ) : (
         <FlatList
-          data={hackathons}
+          data={filteredHackathons} // Use filteredHackathons here
           keyExtractor={(item) => item.hackathon_id.toString()}
           renderItem={renderHackathonItem}
-          contentContainerStyle={styles.list}
         />
       )}
     </View>
@@ -229,18 +253,12 @@ const HackathonScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
+    padding: 16,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
   },
   applyButton: {
     backgroundColor: '#000',
@@ -249,79 +267,76 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
   },
-  
   applyButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },  
-  list: {
-    paddingBottom: 20,
+  filterContainer: {
+    marginVertical: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  picker: {
+    height: 50,
+    width: '100%',
   },
   hackathonItem: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    marginBottom: 15,
     padding: 15,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    backgroundColor: '#fff',
   },
   hackathonImage: {
     width: '100%',
     height: 150,
-    borderRadius: 10,
+    borderRadius: 5,
   },
   iconContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
-    marginBottom: 10,
+    marginVertical: 10,
   },
   tag: {
-    paddingVertical: 4,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    borderRadius: 4,
+    borderRadius: 5,
     alignSelf: 'flex-start',
   },
   tagText: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 14,
   },
   hackathonTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
   },
   hackathonSubtitle: {
     fontSize: 14,
-    color: '#666',
-    marginBottom: 10,
+    color: '#555',
   },
   pdfLink: {
     color: '#007BFF',
-    marginBottom: 10,
+    marginTop: 10,
   },
   dateContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginTop: 10,
   },
   dateText: {
     marginLeft: 5,
-    color: '#333',
   },
   contactContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginTop: 5,
   },
   linkText: {
+    color: '#000',
     marginLeft: 5,
-    color: '#020304',
   },
 });
 

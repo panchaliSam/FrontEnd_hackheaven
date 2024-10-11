@@ -1,24 +1,29 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { DrawerContentScrollView, DrawerItemList, DrawerItemListProps } from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps } from '@react-navigation/drawer';
 import { Divider } from 'react-native-paper';
+import { getAuth } from 'firebase/auth'; // Import Firebase Auth
 
-interface SidebarProps extends DrawerItemListProps {
-  navigation: {
-    navigate: (screen: string) => void; // Define navigate function type
+// No need for a custom interface
+const Sidebar: React.FC<DrawerContentComponentProps> = (props) => {
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await auth.signOut(); // Sign out the user
+      props.navigation.navigate('SignIn'); // Navigate to Sign In screen after logout
+    } catch (error) {
+      console.error('Logout Error:', error);
+    }
   };
-}
 
-const Sidebar: React.FC<SidebarProps> = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       {/* Profile Section */}
       <View style={styles.profileContainer}>
         <Image
-          source={{ uri: 'https://i.imgur.com/your-profile-image.png' }} // Replace with actual image URI
-          style={styles.profileImage}
+          source={require('../assets/images/logos/LightBGPNG.png')} // Ensure the path to the image is correct
+          style={styles.logo}
         />
-        <Text style={styles.profileName}>John Doe</Text>
         <Divider style={styles.divider} />
       </View>
 
@@ -39,9 +44,16 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => props.navigation.navigate('Innovations')}
+        onPress={() => props.navigation.navigate('Innovators')}
       >
         <Text style={styles.menuText}>Innovations</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.menuItem}
+        onPress={() => props.navigation.navigate('Organizer')}
+      >
+        <Text style={styles.menuText}>Organizer</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -53,19 +65,12 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
 
       <Divider style={styles.divider} />
 
-      {/* Subscription and Profile Edit Links */}
+      {/* Logout Button */}
       <TouchableOpacity
-        style={styles.menuItem}
-        onPress={() => props.navigation.navigate('SubscriptionPlan')}
+        style={styles.logoutButton}
+        onPress={handleLogout} // Handle logout
       >
-        <Text style={styles.menuText}>Subscription Plan</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.menuItem}
-        onPress={() => props.navigation.navigate('EditProfile')}
-      >
-        <Text style={styles.menuText}>Edit Profile</Text>
+        <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
     </DrawerContentScrollView>
   );
@@ -75,31 +80,38 @@ const styles = StyleSheet.create({
   profileContainer: {
     alignItems: 'center',
     marginBottom: 20,
-    backgroundColor: '#00AEEF', // Background color for the profile section
+    backgroundColor: '#fff', // Background color for the profile section
     paddingVertical: 20,
   },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-  },
-  profileName: {
-    marginTop: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
+  logo: {
+    width: 255,
+    height: 200,
+    marginBottom: 20,
   },
   divider: {
     marginVertical: 10,
     width: '80%',
-    backgroundColor: '#fff',
+    backgroundColor: '#4b4b4b',
   },
   menuItem: {
     padding: 15,
   },
   menuText: {
     fontSize: 16,
-    color: '#fff',
+    color: '#000',
+  },
+  logoutButton: {
+    backgroundColor: 'black',
+    borderRadius: 5,
+    paddingVertical: 10,
+    alignItems: 'center',
+    marginVertical: 10,
+    width: '50%', // Set the desired width (adjust as needed)
+    marginLeft: 10,
+  },
+  logoutText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 
