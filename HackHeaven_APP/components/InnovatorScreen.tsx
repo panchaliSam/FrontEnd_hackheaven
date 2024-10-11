@@ -13,6 +13,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth'; // Import Firebase Auth
+import { Picker } from '@react-native-picker/picker';
 
 interface Innovator {
   innovator_name: string;
@@ -28,10 +29,10 @@ interface Innovator {
 
 // Define colors for innovation categories (optional)
 const innovationCategoryColors: Record<string, string> = {
-  Technology: '#28a745',
-  Environment: '#17a2b8',
-  Health: '#ffc107',
-  Education: '#dc3545',
+  'Green Technology': '#28a745',
+  'Artificial Intelligence': '#17a2b8',
+  Healthcare: '#ffc107',
+  'Information Technology': '#dc3545',
   Other: '#6c757d',
 };
 
@@ -39,6 +40,7 @@ const InnovatorScreen: React.FC = () => {
   const navigation = useNavigation();
   const [innovators, setInnovators] = useState<Innovator[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const auth = getAuth(); // Initialize Firebase Auth
 
   const handleAddInnovator = () => {
@@ -138,6 +140,25 @@ const InnovatorScreen: React.FC = () => {
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.filterContainer}>
+        <Picker
+          selectedValue={selectedCategory}
+          onValueChange={(itemValue) => {
+            setSelectedCategory(itemValue);
+            fetchInnovators(); // Fetch innovators again when category changes
+          }}
+          style={styles.picker}
+        >
+          <Picker.Item label="All" value="All" />
+          <Picker.Item label="Green Technology" value="Green Technology" />
+          <Picker.Item label="Healthcare" value="Healthcare" />
+          <Picker.Item label="Artificial Intelligence" value="Artificial Intelligence" />
+          <Picker.Item label="Information Technology" value="Information Technology" />
+          <Picker.Item label="Other" value="Other" />
+        </Picker>
+      </View>
+
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : innovators.length === 0 ? (
@@ -240,6 +261,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
     marginTop: 20,
+  },
+  filterContainer: {
+    marginVertical: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  picker: {
+    height: 50,
+    width: '100%',
   },
 });
 

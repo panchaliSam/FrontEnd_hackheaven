@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image, Dimensions, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons
 
 const AddInnovatorScreen: React.FC = () => {
   const [innovatorName, setInnovatorName] = useState<string>('');
@@ -112,69 +114,116 @@ const AddInnovatorScreen: React.FC = () => {
     setImageData(null);
   };
 
+  const capitalizeWords = (text: string) => {
+    return text.replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  const capitalizeFirstLetter = (text: string) => {
+    if (text.length === 0) return text;
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Add Innovator</Text>
-
+    <ScrollView style={styles.container}>
+      <Text style={styles.label}>
+        Innovator Name <Text style={styles.required}>*</Text>
+      </Text>
       <TextInput
         style={styles.input}
-        placeholder="Innovator Name"
+        placeholder="Innovator Name *"
         value={innovatorName}
-        onChangeText={setInnovatorName}
+        onChangeText={(text) => setInnovatorName(capitalizeWords(text))}
       />
 
+      
+<Text style={styles.label}>
+        Contact No <Text style={styles.required}>*</Text>
+      </Text>
       <TextInput
         style={styles.input}
-        placeholder="Product Name"
-        value={productName}
-        onChangeText={setProductName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Innovation Category"
-        value={innovationCategory}
-        onChangeText={setInnovationCategory}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
-        multiline
-        numberOfLines={4}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Proposal Link"
-        value={proposalLink}
-        onChangeText={setProposalLink}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Contact No"
+        placeholder="Contact No *"
         value={contactNo}
         onChangeText={setContactNo}
         keyboardType="phone-pad"
       />
 
+      <Text style={styles.label}>
+        Email <Text style={styles.required}>*</Text>
+      </Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Email *"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
       />
 
+      <Text style={styles.label}>
+        Product Name <Text style={styles.required}>*</Text>
+      </Text>
       <TextInput
         style={styles.input}
-        placeholder="Video Link"
-        value={videoLink}
-        onChangeText={setVideoLink}
+        placeholder="Product Name *"
+        value={productName}
+        onChangeText={(text) => setProductName(capitalizeWords(text))}
       />
+
+      <Text style={styles.label}>
+        Innovation Category <Text style={styles.required}>*</Text>
+      </Text>
+      <Picker
+        selectedValue={innovationCategory}
+        style={styles.picker}
+        onValueChange={(itemValue) => setInnovationCategory(itemValue)}
+      >
+        <Picker.Item label="Green Technology" value="Green Technology" />
+        <Picker.Item label="Artificial Intelligence" value="Artificial Intelligence" />
+        <Picker.Item label="Healthcare" value="Healthcare" />
+        <Picker.Item label="Information Technology" value="Information Technology" />
+        <Picker.Item label="Other" value="Other" />
+      </Picker>
+
+      <Text style={styles.label}>
+        Description <Text style={styles.required}>*</Text>
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Description *"
+        value={description}
+        onChangeText={(text) => setDescription(capitalizeFirstLetter(text))}
+        multiline
+        numberOfLines={4}
+      />
+
+      <Text style={styles.label}>
+        Proposal Link <Text style={styles.required}>*</Text>
+      </Text>
+      <View style={styles.proposalLinkContainer}>
+        <TextInput
+          style={[styles.input, styles.proposalInput]}
+          placeholder="Proposal Link *"
+          value={proposalLink}
+          onChangeText={setProposalLink}
+        />
+        <TouchableOpacity style={styles.attachIcon} onPress={() => Alert.alert('Attach a link')}>
+          <Ionicons name="attach" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.label}>
+        Proposal Link <Text style={styles.required}>*</Text>
+      </Text>
+      <View style={styles.proposalLinkContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Video Link *"
+          value={videoLink}
+          onChangeText={setVideoLink}
+        />
+        <TouchableOpacity style={styles.attachIcon} onPress={() => Alert.alert('Attach a video link')}>
+          <Ionicons name="attach" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity style={styles.imagePicker} onPress={handleImagePick}>
         {image ? (
@@ -187,7 +236,7 @@ const AddInnovatorScreen: React.FC = () => {
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Add Innovator</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -197,11 +246,13 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: '#333',
+  },
+  required: {
+    color: 'red', // Red color for required indicator
   },
   input: {
     height: 50,
@@ -210,33 +261,53 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     paddingHorizontal: 10,
+    backgroundColor: '#fff',
+  },
+  picker: {
+    height: 50,
+    marginBottom: 15,
+    backgroundColor:'#fff',
+  },
+  proposalLinkContainer: {
+    position: 'relative',
+    marginBottom: 15,
+  },
+  proposalInput: {
+    flex: 1,
+  },
+  attachIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 12, // Adjust top position to center the icon vertically
+    zIndex: 1, // Ensure the icon is above the input
   },
   imagePicker: {
-    height: 150,
+    height: 200,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-  },
-  imagePreview: {
-    height: 150,
-    borderRadius: 5,
+    backgroundColor: '#e0e0e0',
   },
   imageText: {
-    color: '#aaa',
+    color: '#888',
+  },
+  imagePreview: {
+    height: '100%',
+    borderRadius: 5,
   },
   submitButton: {
     backgroundColor: '#000',
-    paddingVertical: 10,
+    padding: 15,
     borderRadius: 5,
     alignItems: 'center',
+    marginBottom:50,
   },
   submitButtonText: {
-    color: 'white',
+    color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 

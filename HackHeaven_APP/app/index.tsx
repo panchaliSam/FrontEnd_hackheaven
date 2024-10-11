@@ -1,14 +1,18 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native'; // Import View and StyleSheet
+import { StyleSheet, StatusBar, SafeAreaView, Platform  } from 'react-native'; // Import View and StyleSheet
 import { registerRootComponent } from 'expo';
 import AppNavigator from '@/components/navigation/AppNavigator'; // Adjust path as needed
 
 const App: React.FC = () => {
   return (
-    <View style={styles.container}> 
+    <SafeAreaView style={styles.container}>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={Platform.OS === 'ios' ? 'transparent' : '#007BFF'}
+      />
       <AppNavigator />
-    </View>
-  ); 
+    </SafeAreaView>
+  );
 };
 
 // Define styles

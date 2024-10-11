@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image, Dimensions } from 'react-native'; // Import Dimensions
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 const AddSponsorScreen: React.FC = () => {
@@ -12,7 +12,7 @@ const AddSponsorScreen: React.FC = () => {
   const [imageData, setImageData] = useState<ImagePicker.ImageInfo | null>(null);
 
   // Get screen width and height
-  const screenWidth = Dimensions.get('window').width; // Define screenWidth here
+  const screenWidth = Dimensions.get('window').width;
 
   useEffect(() => {
     (async () => {
@@ -33,14 +33,15 @@ const AddSponsorScreen: React.FC = () => {
     const result = await ImagePicker.launchImageLibraryAsync(options);
 
     if (!result.canceled && result.assets) {
-      setLogo(result.assets[0].uri); // Set the URI of the selected image
-      setImageData(result.assets[0]); // Store the entire image data for upload
+      setLogo(result.assets[0].uri);
+      setImageData(result.assets[0]);
     }
   };
 
   const handleSubmit = async () => {
+    // Validate fields
     if (!sponsorName || !email || !contactNo || !country || !imageData) {
-      Alert.alert('Error', 'Please fill all fields and select an image.');
+      Alert.alert('Error', 'All fields are required. Please fill in all fields and select an image.');
       return;
     }
 
@@ -50,10 +51,15 @@ const AddSponsorScreen: React.FC = () => {
       return;
     }
 
+    if (contactNo.length < 10) {
+      Alert.alert('Error', 'Contact number must be at least 10 digits long.');
+      return;
+    }
+
     let fileToUpload = null;
     try {
       const response = await fetch(imageData.uri);
-      fileToUpload = await response.blob(); // Convert the image URI to a Blob
+      fileToUpload = await response.blob();
     } catch (error) {
       console.error('Error converting image to Blob:', error);
       Alert.alert('Error', 'Failed to process the selected image.');
@@ -66,7 +72,6 @@ const AddSponsorScreen: React.FC = () => {
     formData.append('contact_no', contactNo);
     formData.append('country', country);
     formData.append('category', category);
-
     formData.append('logo', fileToUpload, imageData.fileName || 'logo.jpg');
 
     try {
@@ -108,14 +113,14 @@ const AddSponsorScreen: React.FC = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Sponsor Name"
+        placeholder="Sponsor Name *"
         value={sponsorName}
         onChangeText={setSponsorName}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Email *"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -123,7 +128,7 @@ const AddSponsorScreen: React.FC = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Contact No"
+        placeholder="Contact No *"
         value={contactNo}
         onChangeText={setContactNo}
         keyboardType="phone-pad"
@@ -131,7 +136,7 @@ const AddSponsorScreen: React.FC = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Country"
+        placeholder="Country *"
         value={country}
         onChangeText={setCountry}
       />
@@ -147,7 +152,7 @@ const AddSponsorScreen: React.FC = () => {
         {logo ? (
           <Image source={{ uri: logo }} style={[styles.imagePreview, { width: screenWidth - 40 }]} />
         ) : (
-          <Text style={styles.imageText}>Pick an Image</Text>
+          <Text style={styles.imageText}>Pick an Image *</Text>
         )}
       </TouchableOpacity>
 
