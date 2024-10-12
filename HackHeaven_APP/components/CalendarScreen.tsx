@@ -36,7 +36,7 @@ const CalendarScreen: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Title style={styles.headerTitle}>Calendar</Title>
+        <Title style={styles.headerTitle}>C A L E N D A R</Title>
         <Image
           source={{ uri: 'https://i.imgur.com/your-profile-image.png' }} // Ensure this image URL is valid
           style={styles.profileImage}

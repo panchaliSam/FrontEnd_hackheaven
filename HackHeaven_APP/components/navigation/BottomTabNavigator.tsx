@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '@/components/HomeScreen';
-import SearchScreen from '@/components/SearchScreen';
+import SearchScreen from '@/components/UserSearch';
 import SavedScreen from '@/components/SavedScreen';
 import CalendarScreen from '@/components/CalendarScreen';
 
@@ -17,8 +17,8 @@ const BottomTabNavigator: React.FC = () => {
 
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Search') {
-            iconName = focused ? 'search' : 'search-outline';
+          } else if (route.name === 'Network') {
+            iconName = focused ? 'globe' : 'globe-outline';
           } else if (route.name === 'Saved') {
             iconName = focused ? 'folder' : 'folder-outline';
           } else if (route.name === 'Calendar') {
@@ -31,10 +31,10 @@ const BottomTabNavigator: React.FC = () => {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Search" component={SearchScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Saved" component={SavedScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Network" component={SearchScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Saved" component={SavedScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 };

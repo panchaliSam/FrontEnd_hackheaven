@@ -1,25 +1,30 @@
-import React from 'react';
-import { StyleSheet, StatusBar, SafeAreaView, Platform  } from 'react-native'; // Import View and StyleSheet
+import React, { useEffect } from 'react';
+import { StyleSheet, StatusBar, SafeAreaView, Platform } from 'react-native'; 
 import { registerRootComponent } from 'expo';
-import AppNavigator from '@/components/navigation/AppNavigator'; // Adjust path as needed
+import AppNavigator from '@/components/navigation/AppNavigator'; 
 
 const App: React.FC = () => {
+  useEffect(() => {
+    // Set status bar style when app mounts
+    StatusBar.setBarStyle('light-content'); // or 'dark-content'
+    StatusBar.setBackgroundColor(Platform.OS === 'ios' ? 'transparent' : '#007BFF');
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        barStyle="light-content"
-        backgroundColor={Platform.OS === 'ios' ? 'transparent' : '#007BFF'}
+        barStyle="light-content" // Set desired style
+        backgroundColor={Platform.OS === 'ios' ? 'transparent' : '#007BFF'} // Background color
       />
       <AppNavigator />
     </SafeAreaView>
   );
 };
 
-// Define styles
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Allow the View to take up the full screen
-    backgroundColor: '#fff', // Set a background color (optional)
+    flex: 1, 
+    backgroundColor: '#fff', 
   },
 });
 

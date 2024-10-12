@@ -16,7 +16,11 @@ import SponsorScreen from '@/components/SponsorScreen';
 import AddSponsorScreen from '@/components/AddSponsorScreen';
 import InnovatorScreen from '@/components/InnovatorScreen';
 import AddInnovatorScreen from '@/components/AddInnovatorScreen';
-import OrganizerScreen from '@/components/OrganizerScreen';
+import OrganizerScreen from '@/components/OrganizerDashboardScreen';
+import OrganizerAddHacakthon from '@/components/OrganizerScreen'
+import AddHackathon from '@/components/AddHackathon';
+import ChatScreen from '@/components/ChatScreen';
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator(); // Create Drawer Navigator
@@ -52,12 +56,15 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen name="Main" component={MainDrawerNavigator} options={{ headerShown: false }} />
         
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-        <Stack.Screen name="Hackathons" component={HackathonScreen} />
-        <Stack.Screen name="Sponsors" component={SponsorScreen} />
-        <Stack.Screen name="AddSponsor" component={AddSponsorScreen} />
-        <Stack.Screen name="Innovators" component={InnovatorScreen} />
-        <Stack.Screen name="AddInnovator" component={AddInnovatorScreen} />
-        <Stack.Screen name="Organizer" component={OrganizerScreen} />
+        <Stack.Screen name="H A C K A T H O N S" component={HackathonScreen} />
+        <Stack.Screen name="S P O N S O R S" component={SponsorScreen} />
+        <Stack.Screen name="ADD  SPONSOR" component={AddSponsorScreen} />
+        <Stack.Screen name="I N N O V A T I O N S" component={InnovatorScreen} />
+        <Stack.Screen name="ADD INNOVATOR" component={AddInnovatorScreen} />
+        <Stack.Screen name="O R G A N I Z E R" component={OrganizerScreen} />
+        <Stack.Screen name="ADD HACKATHON" component={OrganizerAddHacakthon} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="ADD HACKATHON2" component={AddHackathon} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -67,7 +74,7 @@ const AppNavigator: React.FC = () => {
 const MainDrawerNavigator = () => {
   return (
     <Drawer.Navigator drawerContent={(props) => <Sidebar {...props} />}>
-      <Drawer.Screen name="Menu" component={BottomTabNavigator} />
+      <Drawer.Screen name="M E N U" component={BottomTabNavigator} />
       {/* Add more screens to the drawer if needed */}
       <Drawer.Screen name="Profile" component={ProfileScreen} />
       {/* Additional screens can be added here */}

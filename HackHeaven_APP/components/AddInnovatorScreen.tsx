@@ -43,6 +43,31 @@ const AddInnovatorScreen: React.FC = () => {
     }
   };
 
+  const handleNameChange = (text: string) => {
+    const sanitizedText = text.replace(/[^a-zA-Z'\s]/g, ''); // Allow only letters, apostrophes, and spaces
+    const capitalizedText = sanitizedText.replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
+    setInnovatorName(capitalizedText);
+  };
+
+  const handleEmailChange = (text: string) => {
+    const emailRegex = /^[a-zA-Z][^\s@]+@[^\s@]+\.[^\s@]+$/; // Email must start with a letter
+    if (emailRegex.test(text)) {
+      setEmail(text);
+    } else {
+      Alert.alert('Invalid Email', 'Email must start with a letter and be in a valid format.');
+    }
+  };
+  
+  const handleLinkValidation = (text: string, setterFunction: React.Dispatch<React.SetStateAction<string>>) => {
+    const urlRegex = /^(https?:\/\/)?([\w\d-]+\.){1,3}[a-zA-Z]{2,}(\/[\w\d#?&=.-]*)*\/?$/;
+    if (urlRegex.test(text)) {
+      setterFunction(text);
+    } else {
+      Alert.alert('Invalid URL', 'Please enter a valid link starting with http or https.');
+    }
+  };
+  
+
   const handleSubmit = async () => {
     if (!innovatorName || !productName || !innovationCategory || !description || !proposalLink || !contactNo || !email || !imageData) {
       Alert.alert('Error', 'Please fill all fields and select an image.');
@@ -132,22 +157,27 @@ const AddInnovatorScreen: React.FC = () => {
         style={styles.input}
         placeholder="Innovator Name *"
         value={innovatorName}
-        onChangeText={(text) => setInnovatorName(capitalizeWords(text))}
+        onChangeText={handleNameChange} // Updated onChangeText handler
       />
-
       
-<Text style={styles.label}>
+      <Text style={styles.label}>
         Contact No <Text style={styles.required}>*</Text>
       </Text>
       <TextInput
         style={styles.input}
         placeholder="Contact No *"
         value={contactNo}
-        onChangeText={setContactNo}
+        onChangeText={(text) => {
+          const sanitizedText = text.replace(/[^0-9]/g, ''); // Allow only digits
+          if (sanitizedText.length <= 10) {
+            setContactNo(sanitizedText); // Limit to 10 digits
+          }
+        }}
         keyboardType="phone-pad"
+        maxLength={10} // Ensure only 10 characters can be input
       />
-
-      <Text style={styles.label}>
+      
+    <Text style={styles.label}>
         Email <Text style={styles.required}>*</Text>
       </Text>
       <TextInput
@@ -203,7 +233,7 @@ const AddInnovatorScreen: React.FC = () => {
           style={[styles.input, styles.proposalInput]}
           placeholder="Proposal Link *"
           value={proposalLink}
-          onChangeText={setProposalLink}
+          onChangeText={(text) => handleLinkValidation(text, setProposalLink)} // Updated link validation handler
         />
         <TouchableOpacity style={styles.attachIcon} onPress={() => Alert.alert('Attach a link')}>
           <Ionicons name="attach" size={24} color="black" />
@@ -211,14 +241,14 @@ const AddInnovatorScreen: React.FC = () => {
       </View>
 
       <Text style={styles.label}>
-        Proposal Link <Text style={styles.required}>*</Text>
+        Video Link <Text style={styles.required}>*</Text>
       </Text>
       <View style={styles.proposalLinkContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, styles.proposalInput]}
           placeholder="Video Link *"
           value={videoLink}
-          onChangeText={setVideoLink}
+          onChangeText={(text) => handleLinkValidation(text, setVideoLink)} // Updated link validation handler
         />
         <TouchableOpacity style={styles.attachIcon} onPress={() => Alert.alert('Attach a video link')}>
           <Ionicons name="attach" size={24} color="black" />
@@ -234,7 +264,7 @@ const AddInnovatorScreen: React.FC = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Add Innovator</Text>
+        <Text style={styles.submitButtonText}>S U B M I T</Text>
       </TouchableOpacity>
     </ScrollView>
   );

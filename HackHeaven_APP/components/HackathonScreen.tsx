@@ -28,8 +28,17 @@ interface Hackathon {
   proposal_pdf: string;
 }
 
+const hackathonImages: Record<string, string> = {
+    Technology: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Ftechnology.jpg?alt=media&token=79f5579a-3734-4f0b-847f-5dd084ec729e',
+    Business: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Fbusiness.jpg?alt=media&token=9167ca81-77de-41be-bdc1-c66af2d6649a',
+    Coding: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Fcoding.jpg?alt=media&token=01a2ed1d-b6d5-4f41-97dd-58022ab62690',
+    Gaming: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Fgaming.jpg?alt=media&token=73bb0554-3fb1-49dd-aed9-09b405d0d9b6',
+    Innovation: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Finnovation.jpg?alt=media&token=b41fad7e-4ecd-46ef-9463-30e94031a475',
+    Other: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FHackathon.jpg?alt=media&token=6b8e9b2d-4358-4531-9c0f-16ffe1c6afad',
+  };
+
 const hackathonTypeColors: Record<string, string> = {
-  Technical: '#28a745',
+Technology: '#28a745',
   Business: '#17a2b8',
   Coding: '#ffc107',
   Gaming: '#dc3545',
@@ -154,11 +163,11 @@ const HackathonScreen: React.FC = () => {
     return (
       <View style={styles.hackathonItem}>
         <Image
-          source={{
-            uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Fhackx.png?alt=media&token=81fdd552-8d5b-4cef-b433-334f381a5aa6',
-          }}
-          style={styles.hackathonImage}
-          resizeMode="cover"
+        source={{
+            uri: hackathonImages[item.hackathon_type] || 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FHackathon.jpg?alt=media&token=6b8e9b2d-4358-4531-9c0f-16ffe1c6afad',
+        }}
+        style={styles.hackathonImage}
+        resizeMode="cover"
         />
 
         <View style={styles.iconContainer}>
@@ -213,12 +222,12 @@ const HackathonScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.applyButton}>
+        {/* <TouchableOpacity style={styles.applyButton}>
             <Text style={styles.applyButtonText}>Apply</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.applyButton}>
             <Text style={styles.applyButtonText}>Add</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <View style={styles.filterContainer}>

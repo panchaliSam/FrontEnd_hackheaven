@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Import 
 import { RouteProp } from '@react-navigation/native';
 import { Platform } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Import icon library
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth'; // Import Firebase Auth functions
 
 type RootStackParamList = {
   ProfileScreen: { user_token: string; email: string };
@@ -19,6 +20,8 @@ interface ProfileScreenProps {
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ route }) => {
   const { user_token, email } = route.params;
   const [profileImage, setProfileImage] = useState<string | null>(null); // Initially null
+
+  const auth = getAuth(); // Initialize Firebase Auth
 
   // Function to upload the image
   const uploadImage = async (uri: string) => {
@@ -78,6 +81,17 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route }) => {
     }
   };
 
+  // Function to reset password
+  const resetPassword = async () => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert('Success', 'Password reset email sent. Please check your inbox.');
+    } catch (error) {
+      console.error('Password reset error:', error);
+      Alert.alert('Error', 'Failed to send password reset email. Please try again.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={selectImage} style={styles.imageButton}>
@@ -99,7 +113,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={() => Alert.alert('Reset Password')} style={styles.resetButton}>
+        <TouchableOpacity onPress={resetPassword} style={styles.resetButton}>
           <Text style={styles.resetText}>Reset Password</Text>
         </TouchableOpacity>
 

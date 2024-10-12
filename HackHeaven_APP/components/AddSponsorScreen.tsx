@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image, Dimensions, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
 
 const AddSponsorScreen: React.FC = () => {
   const [sponsorName, setSponsorName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+  const [companyName, setCompanyName] = useState<string>('');
+  const [sponsorshipCategory, setSponsorshipCategory] = useState<string>('Platinum');
+  const [description, setDescription] = useState<string>('');
+  const [websiteLink, setWebsiteLink] = useState<string>('');
   const [contactNo, setContactNo] = useState<string>('');
-  const [country, setCountry] = useState<string>('');
-  const [category, setCategory] = useState<string>('Technical');
-  const [logo, setLogo] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>('');
+  const [image, setImage] = useState<string | null>(null);
   const [imageData, setImageData] = useState<ImagePicker.ImageInfo | null>(null);
 
-  // Get screen width and height
   const screenWidth = Dimensions.get('window').width;
 
   useEffect(() => {
@@ -33,26 +36,30 @@ const AddSponsorScreen: React.FC = () => {
     const result = await ImagePicker.launchImageLibraryAsync(options);
 
     if (!result.canceled && result.assets) {
-      setLogo(result.assets[0].uri);
+      setImage(result.assets[0].uri);
       setImageData(result.assets[0]);
     }
   };
 
+  const capitalizeEveryWord = (text: string) => {
+    if (!text) return '';
+    return text
+      .split(' ') // Split the text into words
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
+      .join(' '); // Join the words back into a single string
+  };
+  
+  
+
   const handleSubmit = async () => {
-    // Validate fields
-    if (!sponsorName || !email || !contactNo || !country || !imageData) {
-      Alert.alert('Error', 'All fields are required. Please fill in all fields and select an image.');
+    if (!sponsorName || !companyName || !sponsorshipCategory || !description || !websiteLink || !contactNo || !email || !imageData) {
+      Alert.alert('Error', 'Please fill all fields and select an image.');
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert('Error', 'Please enter a valid email address.');
-      return;
-    }
-
-    if (contactNo.length < 10) {
-      Alert.alert('Error', 'Contact number must be at least 10 digits long.');
       return;
     }
 
@@ -68,11 +75,14 @@ const AddSponsorScreen: React.FC = () => {
 
     const formData = new FormData();
     formData.append('sponsor_name', sponsorName);
-    formData.append('email', email);
+    formData.append('company_name', companyName);
+    formData.append('sponsorship_category', sponsorshipCategory);
+    formData.append('description', description);
+    formData.append('website_link', websiteLink);
     formData.append('contact_no', contactNo);
-    formData.append('country', country);
-    formData.append('category', category);
-    formData.append('logo', fileToUpload, imageData.fileName || 'logo.jpg');
+    formData.append('email', email);
+
+    formData.append('image', fileToUpload, imageData.fileName || 'image.jpg');
 
     try {
       const response = await fetch('http://192.168.1.9:4003/api/sponsor/add', {
@@ -87,7 +97,7 @@ const AddSponsorScreen: React.FC = () => {
 
       if (response.ok) {
         Alert.alert('Success', 'Sponsor added successfully!');
-        resetForm(); // Reset form after successful submission
+        resetForm();
       } else {
         Alert.alert('Error', result.error || 'Failed to add sponsor');
       }
@@ -99,25 +109,92 @@ const AddSponsorScreen: React.FC = () => {
 
   const resetForm = () => {
     setSponsorName('');
-    setEmail('');
+    setCompanyName('');
+    setSponsorshipCategory('Platinum');
+    setDescription('');
+    setWebsiteLink('');
     setContactNo('');
-    setCountry('');
-    setCategory('Technical');
-    setLogo(null);
+    setEmail('');
+    setImage(null);
     setImageData(null);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Add Sponsor</Text>
-
+    <ScrollView style={styles.container}>
+      <Text style={styles.label}>
+        Sponsor Name <Text style={styles.required}>*</Text>
+      </Text>
       <TextInput
         style={styles.input}
         placeholder="Sponsor Name *"
         value={sponsorName}
-        onChangeText={setSponsorName}
+        onChangeText={(text) => setSponsorName(capitalizeEveryWord(text))}
       />
 
+      <Text style={styles.label}>
+        Company Name <Text style={styles.required}>*</Text>
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Company Name *"
+        value={companyName}
+        onChangeText={(text) => setCompanyName(capitalizeEveryWord(text))}
+      />
+      <Text style={styles.label}>
+        Sponsorship Category <Text style={styles.required}>*</Text>
+      </Text>
+      <Picker
+        selectedValue={sponsorshipCategory}
+        style={styles.picker}
+        onValueChange={(itemValue) => setSponsorshipCategory(itemValue)}
+      >
+        <Picker.Item label="Platinum" value="Platinum" />
+        <Picker.Item label="Gold" value="Gold" />
+        <Picker.Item label="Silver" value="Silver" />
+      </Picker>
+
+      <Text style={styles.label}>
+        Description <Text style={styles.required}>*</Text>
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Description *"
+        value={description}
+        onChangeText={setDescription}
+        multiline
+        numberOfLines={4}
+      />
+
+      <Text style={styles.label}>
+        Website Link <Text style={styles.required}>*</Text>
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Website Link *"
+        value={websiteLink}
+        onChangeText={setWebsiteLink}
+      />
+
+      <Text style={styles.label}>
+        Contact No <Text style={styles.required}>*</Text>
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Contact No *"
+        value={contactNo}
+        onChangeText={(text) => {
+          const sanitizedText = text.replace(/[^0-9]/g, '');
+          if (sanitizedText.length <= 10) {
+            setContactNo(sanitizedText);
+          }
+        }}
+        keyboardType="phone-pad"
+        maxLength={10}
+      />
+
+      <Text style={styles.label}>
+        Email <Text style={styles.required}>*</Text>
+      </Text>
       <TextInput
         style={styles.input}
         placeholder="Email *"
@@ -126,40 +203,18 @@ const AddSponsorScreen: React.FC = () => {
         keyboardType="email-address"
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Contact No *"
-        value={contactNo}
-        onChangeText={setContactNo}
-        keyboardType="phone-pad"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Country *"
-        value={country}
-        onChangeText={setCountry}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Category"
-        value={category}
-        onChangeText={setCategory}
-      />
-
       <TouchableOpacity style={styles.imagePicker} onPress={handleImagePick}>
-        {logo ? (
-          <Image source={{ uri: logo }} style={[styles.imagePreview, { width: screenWidth - 40 }]} />
+        {image ? (
+          <Image source={{ uri: image }} style={[styles.imagePreview, { width: screenWidth - 40 }]} />
         ) : (
-          <Text style={styles.imageText}>Pick an Image *</Text>
+          <Text>Select Image</Text>
         )}
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Add Sponsor</Text>
+        <Text style={styles.submitButtonText}>S U B M I T</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -167,48 +222,52 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
   },
-  header: {
-    fontSize: 24,
+  label: {
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    marginBottom: 5,
+  },
+  required: {
+    color: 'red',
   },
   input: {
-    height: 50,
-    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
     marginBottom: 15,
-    paddingHorizontal: 10,
+  },
+  picker: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
   },
   imagePicker: {
-    height: 150,
-    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
   },
   imagePreview: {
-    height: 150,
-    borderRadius: 5,
-  },
-  imageText: {
-    color: '#aaa',
+    height: 200,
+    borderRadius: 8,
   },
   submitButton: {
     backgroundColor: '#000',
-    paddingVertical: 10,
-    borderRadius: 5,
+    padding: 15,
+    borderRadius: 8,
     alignItems: 'center',
   },
   submitButtonText: {
-    color: 'white',
-    fontSize: 16,
+    color: '#fff',
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

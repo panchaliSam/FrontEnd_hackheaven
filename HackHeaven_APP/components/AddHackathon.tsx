@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image, Dimensions, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -20,6 +20,15 @@ const AddHackathonScreen: React.FC = () => {
   // Get screen width
   const screenWidth = Dimensions.get('window').width;
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission to access the camera roll is required!');
+      }
+    })();
+  }, []);
+
   const handleLogoPick = async () => {
     const options: ImagePicker.ImagePickerOptions = {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -32,6 +41,35 @@ const AddHackathonScreen: React.FC = () => {
     if (!result.canceled && result.assets) {
       setLogo(result.assets[0].uri); // Set the URI of the selected logo
       setLogoData(result.assets[0]); // Store the entire image data for upload
+    }
+  };
+
+  const handleOrganizationNameChange = (text: string) => {
+    const sanitizedText = text.replace(/[^a-zA-Z'\s]/g, ''); // Allow only letters, apostrophes, and spaces
+    const capitalizedText = sanitizedText.replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
+    setOrganizationName(capitalizedText);
+  };
+
+  const handleHackathonNameChange = (text: string) => {
+    const sanitizedText = text.replace(/[^a-zA-Z0-9'\s]/g, ''); // Allow only letters, numbers, apostrophes, and spaces
+    setHackathonName(sanitizedText);
+  };
+
+  const handleEmailChange = (text: string) => {
+    const emailRegex = /^[a-zA-Z][^\s@]+@[^\s@]+\.[^\s@]+$/; // Email must start with a letter
+    if (emailRegex.test(text)) {
+      setEmail(text);
+    } else {
+      Alert.alert('Invalid Email', 'Email must start with a letter and be in a valid format.');
+    }
+  };
+
+  const handlePhoneNoChange = (text: string) => {
+    const phoneRegex = /^\d{10}$/; // Allow only 10 digits
+    if (phoneRegex.test(text)) {
+      setPhoneNo(text);
+    } else {
+      Alert.alert('Invalid Phone Number', 'Phone number must be exactly 10 digits.');
     }
   };
 
@@ -117,7 +155,7 @@ const AddHackathonScreen: React.FC = () => {
         style={styles.input}
         placeholder="Organization Name *"
         value={organizationName}
-        onChangeText={setOrganizationName}
+        onChangeText={handleOrganizationNameChange}
       />
 
       <Text style={styles.label}>
@@ -127,7 +165,7 @@ const AddHackathonScreen: React.FC = () => {
         style={styles.input}
         placeholder="Hackathon Name *"
         value={hackathonName}
-        onChangeText={setHackathonName}
+        onChangeText={handleHackathonNameChange}
       />
 
       <Text style={styles.label}>
@@ -184,7 +222,7 @@ const AddHackathonScreen: React.FC = () => {
         style={styles.input}
         placeholder="Phone No *"
         value={phoneNo}
-        onChangeText={setPhoneNo}
+        onChangeText={handlePhoneNoChange}
         keyboardType="phone-pad"
       />
 
@@ -195,7 +233,7 @@ const AddHackathonScreen: React.FC = () => {
         style={styles.input}
         placeholder="Email *"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={handleEmailChange}
         keyboardType="email-address"
       />
 
@@ -209,16 +247,22 @@ const AddHackathonScreen: React.FC = () => {
         onChangeText={setProposalPdf}
       />
 
-      <TouchableOpacity style={styles.logoPicker} onPress={handleLogoPick}>
+      <Text style={styles.label}>
+        Logo <Text style={styles.required}>*</Text>
+      </Text>
+      <View style={styles.logoPickerContainer}>
         {logo ? (
-          <Image source={{ uri: logo }} style={[styles.imagePreview, { width: screenWidth - 40 }]} />
+          <Image source={{ uri: logo }} style={[styles.logo, { width: screenWidth * 0.7 }]} />
         ) : (
-          <Text style={styles.imageText}>Pick a Logo Image</Text>
+          <Text>No Logo Selected</Text>
         )}
-      </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogoPick} style={styles.uploadButton}>
+          <Text style={styles.uploadButtonText}>Upload Logo</Text>
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>S U B M I T</Text>
+        <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -228,58 +272,56 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
   },
   label: {
     fontSize: 16,
-    marginBottom: 5,
-    color: '#333',
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
   required: {
-    color: 'red', // Red color for required indicator
+    color: 'red',
   },
   input: {
-    height: 50,
-    borderColor: '#ccc',
     borderWidth: 1,
+    borderColor: '#ccc',
     borderRadius: 5,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    padding: 10,
+    marginBottom: 20,
   },
   picker: {
     height: 50,
-    marginBottom: 15,
-    backgroundColor: '#fff',
-  },
-  logoPicker: {
-    height: 200,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
-    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  logoPickerContainer: {
     alignItems: 'center',
     marginBottom: 20,
-    backgroundColor: '#e0e0e0',
   },
-  imageText: {
-    color: '#888',
-  },
-  imagePreview: {
+  logo: {
     height: 200,
     resizeMode: 'contain',
+  },
+  uploadButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
     borderRadius: 5,
+    marginTop: 10,
+  },
+  uploadButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   submitButton: {
-    backgroundColor: '#000',
+    backgroundColor: '#28a745',
+    padding: 15,
     borderRadius: 5,
-    paddingVertical: 15,
     alignItems: 'center',
-    marginBottom:50,
   },
   submitButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
