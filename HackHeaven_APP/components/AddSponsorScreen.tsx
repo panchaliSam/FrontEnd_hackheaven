@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 const AddSponsorScreen: React.FC = () => {
   const [sponsorName, setSponsorName] = useState<string>('');
   const [companyName, setCompanyName] = useState<string>('');
-  const [sponsorshipCategory, setSponsorshipCategory] = useState<string>('Platinum');
+  const [sponsorshipCategory, setSponsorshipCategory] = useState<string>('Technical');
   const [description, setDescription] = useState<string>('');
   const [websiteLink, setWebsiteLink] = useState<string>('');
   const [contactNo, setContactNo] = useState<string>('');
@@ -148,9 +148,11 @@ const AddSponsorScreen: React.FC = () => {
         style={styles.picker}
         onValueChange={(itemValue) => setSponsorshipCategory(itemValue)}
       >
-        <Picker.Item label="Platinum" value="Platinum" />
-        <Picker.Item label="Gold" value="Gold" />
-        <Picker.Item label="Silver" value="Silver" />
+        <Picker.Item label="Technical" value="Technical" />
+        <Picker.Item label="Media" value="Media" />
+        <Picker.Item label="Beverage" value="Beverage" />
+        <Picker.Item label="Business Person" value="Business Person" />
+        <Picker.Item label="Other" value="Other" />
       </Picker>
 
       <Text style={styles.label}>
@@ -263,6 +265,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
+    marginBottom: 50,
   },
   submitButtonText: {
     color: '#fff',
