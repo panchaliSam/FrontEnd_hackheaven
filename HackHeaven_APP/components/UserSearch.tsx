@@ -14,7 +14,7 @@ const UserSearch: React.FC = () => {
   // Fetch users from your backend
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://192.168.1.9:4003/api/auth-user/get-users'); // Replace with your backend URL
+      const response = await fetch('http://172.28.9.185:4003/api/auth-user/get-users'); // Replace with your backend URL
       const data = await response.json();
       setUsers(data);
     } catch (error) {

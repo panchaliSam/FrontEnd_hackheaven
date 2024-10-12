@@ -104,7 +104,7 @@ const AddInnovatorScreen: React.FC = () => {
     formData.append('image', fileToUpload, imageData.fileName || 'image.jpg');
 
     try {
-      const response = await fetch('http://192.168.1.9:4003/api/innovator/add', {
+      const response = await fetch('http://192.168.133.77:4003/api/innovator/add', {
         method: 'POST',
         body: formData,
         headers: {

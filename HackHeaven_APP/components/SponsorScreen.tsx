@@ -63,7 +63,7 @@ const SponsorScreen: React.FC = () => {
       const user = auth.currentUser;
       const accessToken = await user?.getIdToken(); 
 
-      const response = await fetch('http://192.168.1.9:4003/api/sponsor/select-sponsors', {
+      const response = await fetch('http://172.28.9.185:4003/api/sponsor/select-sponsors', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`, 

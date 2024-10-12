@@ -68,7 +68,7 @@ const HackathonScreen: React.FC = () => {
 
   const fetchHackathons = async () => {
     try {
-      const response = await fetch('http://192.168.1.9:4003/api/hackathon/select-hackathons');
+      const response = await fetch('http://192.168.133.77:4003/api/hackathon/select-hackathons');
       const data = await response.json();
       if (response.ok) {
         setHackathons(data.hackathons);

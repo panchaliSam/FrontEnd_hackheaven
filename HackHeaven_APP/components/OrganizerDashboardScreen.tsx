@@ -129,7 +129,7 @@ const OrganizerDashboardScreen = () => {
 
   const handleView = async (id: any) => {
     try {
-      const url = `http://192.168.1.9:4003/api/organizer/getEventDetails?hackathon_id=${id}`;
+      const url = `http://192.168.133.77:4003/api/organizer/getEventDetails?hackathon_id=${id}`;
       const response = await axios.get(url);
 
       if (response.status === 200) {
@@ -149,7 +149,7 @@ const OrganizerDashboardScreen = () => {
       const loggedUserEmail = await AsyncStorage.getItem("userEmail");
 
       if (loggedUserEmail) {
-        const url = `http://192.168.1.9:4003/api/organizer/retrieveHackathonEventsByEmail?email=${encodeURIComponent(
+        const url = `http://192.168.133.77:4003/api/organizer/retrieveHackathonEventsByEmail?email=${encodeURIComponent(
           loggedUserEmail
         )}`;
 
@@ -165,7 +165,7 @@ const OrganizerDashboardScreen = () => {
 
   const handleDeleteEvent = async (id: any) => {
     try {
-      const url = `http://192.168.1.9:4003/api/organizer/deleteHackathonEvent?hackathon_id=${id}`;
+      const url = `http://192.168.133.77:4003/api/organizer/deleteHackathonEvent?hackathon_id=${id}`;
 
       const response = await axios.delete(url);
 
@@ -188,7 +188,7 @@ const OrganizerDashboardScreen = () => {
 
   const submitUpdate = async (id: any) => {
     console.log("fsdfsdfsd", id);
-    const url = `http://192.168.1.9:4003/api/organizer/updateHackathonEvent/?hackathon_id=${id}`;
+    const url = `http://192.168.133.77:4003/api/organizer/updateHackathonEvent/?hackathon_id=${id}`;
 
     if (!validateEditForm()) return;
 

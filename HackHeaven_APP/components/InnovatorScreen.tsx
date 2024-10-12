@@ -64,7 +64,7 @@ const InnovatorScreen: React.FC = () => {
       const user = auth.currentUser;
       const accessToken = await user?.getIdToken(); // This returns a promise
 
-      const response = await fetch('http://192.168.1.9:4003/api/innovator/select-innovators', {
+      const response = await fetch('http://192.168.133.77:4003/api/innovator/select-innovators', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`, // Set the Authorization header

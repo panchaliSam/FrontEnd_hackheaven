@@ -110,7 +110,7 @@ const AddHackathonScreen: React.FC = () => {
     formData.append('logo', fileToUpload, logoData.fileName || 'logo.jpg');
 
     try {
-      const response = await fetch('http://192.168.1.9:4003/api/hackathon/add', {
+      const response = await fetch('http://192.168.133.77:4003/api/hackathon/add', {
         method: 'POST',
         body: formData,
         headers: {
