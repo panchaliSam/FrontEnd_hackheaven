@@ -26,6 +26,14 @@ interface Sponsor {
   logo: string; 
 }
 
+const sponsorImages: Record<string, string> = {
+    Technical: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Ftechnology.jpg?alt=media&token=79f5579a-3734-4f0b-847f-5dd084ec729e',
+    Media: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Fmedia.jpg?alt=media&token=f1dac8b8-56d6-4cc0-86e0-fcceb17a3825',
+    Beverage: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Fbeverage.jpg?alt=media&token=a1110c45-0665-4273-8a3c-5d86ab51904a',
+    'Business Person': 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Fbusiness.jpg?alt=media&token=9167ca81-77de-41be-bdc1-c66af2d6649a',
+    Other: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FSponsor.png?alt=media&token=d5736315-e126-4ecb-a6ef-67bd8ddfdf7b',
+  };
+
 // Define colors for sponsor categories
 const sponsorCategoryColors: Record<string, string> = {
   Technical: '#28a745',
@@ -43,7 +51,7 @@ const SponsorScreen: React.FC = () => {
   const auth = getAuth(); 
 
   const handleAddSponsor = () => {
-    navigation.navigate('AddSponsor');
+    navigation.navigate('ADD  SPONSOR');
   };
 
   useEffect(() => {
@@ -76,6 +84,10 @@ const SponsorScreen: React.FC = () => {
     }
   };
 
+  const handleApplyPress = () => {
+    Linking.openURL('https://forms.gle/nWv7urpHfe86iF3R6'); // Open the application form link
+  };
+
   const shareSponsor = async (sponsor: Sponsor) => {
     try {
       await Share.share({
@@ -99,16 +111,16 @@ const SponsorScreen: React.FC = () => {
 
     return (
       <View style={styles.sponsorItem}>
-        <TouchableOpacity style={styles.applyButton}>
-          <Text style={styles.applyButtonText}>Apply</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.applyButton} onPress={handleApplyPress}>
+        <Text style={styles.applyButtonText}>Apply</Text>
+      </TouchableOpacity>
 
         <Image
-          source={{
-            uri: item.logo || 'https://example.com/default-sponsor-image.png',
-          }}
-          style={styles.sponsorImage}
-          resizeMode="cover"
+        source={{
+            uri: sponsorImages[item.category] || 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FSponsor.png?alt=media&token=d5736315-e126-4ecb-a6ef-67bd8ddfdf7b',
+        }}
+        style={styles.sponsorImage}
+        resizeMode="cover"
         />
 
         <View style={[styles.tag, { backgroundColor: categoryColor }]}>

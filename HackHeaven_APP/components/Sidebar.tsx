@@ -30,7 +30,7 @@ const Sidebar: React.FC<DrawerContentComponentProps> = (props) => {
       {/* Navigation Links */}
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => props.navigation.navigate('Hackathons')}
+        onPress={() => props.navigation.navigate('H A C K A T H O N S')}
       >
         <Text style={styles.menuText}>Hackathons</Text>
       </TouchableOpacity>
@@ -44,21 +44,21 @@ const Sidebar: React.FC<DrawerContentComponentProps> = (props) => {
 
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => props.navigation.navigate('Innovators')}
+        onPress={() => props.navigation.navigate('I N N O V A T I O N S')}
       >
         <Text style={styles.menuText}>Innovations</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => props.navigation.navigate('Organizer')}
+        onPress={() => props.navigation.navigate('O R G A N I Z E R')}
       >
         <Text style={styles.menuText}>Organizer</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => props.navigation.navigate('Sponsors')}
+        onPress={() => props.navigation.navigate('S P O N S O R S')}
       >
         <Text style={styles.menuText}>Sponsors</Text>
       </TouchableOpacity>

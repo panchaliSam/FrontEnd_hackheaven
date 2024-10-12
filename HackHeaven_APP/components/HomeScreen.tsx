@@ -61,7 +61,7 @@ const HomeScreen: React.FC = () => {
                 {/* <TouchableOpacity style={styles.menuButton}>
                     <Text style={styles.menuText}>☰</Text>
                 </TouchableOpacity> */}
-                <Text style={styles.title}>Home</Text>
+                <Text style={styles.title}>H O M E</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { user_token, email })}>
                     <Image
                         source={{ uri: profileImage || 'https://path-to-default-profile-image.png' }} // Default image if null
@@ -75,7 +75,7 @@ const HomeScreen: React.FC = () => {
                 {/* Hackathons card */}
                 <TouchableOpacity
                     style={styles.card}
-                    onPress={() => navigation.navigate('Hackathons')}
+                    onPress={() => navigation.navigate('H A C K A T H O N S')}
                 >
                     <Image
                         source={{
@@ -89,11 +89,11 @@ const HomeScreen: React.FC = () => {
                 {/* Sponsors card */}
                 <TouchableOpacity
                     style={styles.card}
-                    onPress={() => navigation.navigate('Sponsors')}
+                    onPress={() => navigation.navigate('S P O N S O R S')}
                 >
                     <Image
                         source={{
-                            uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HomeScreenImages%2FSponsor.png?alt=media&token=d5736315-e126-4ecb-a6ef-67bd8ddfdf7b',
+                            uri: 'https://firebasestorage.googleapis.com/v0/b/hackheaven-1a9c2.appspot.com/o/HackathonImages%2Fbusiness.jpg?alt=media&token=9167ca81-77de-41be-bdc1-c66af2d6649a',
                         }}
                         style={styles.innovatorImage}
                     />
@@ -103,7 +103,7 @@ const HomeScreen: React.FC = () => {
                 {/* Organizer card */}
                 <TouchableOpacity
                     style={styles.card}
-                    onPress={() => navigation.navigate('Organizer')}
+                    onPress={() => navigation.navigate('O R G A N I Z E R')}
                 >
                     <Image
                         source={{
@@ -117,7 +117,7 @@ const HomeScreen: React.FC = () => {
                 {/* Innovators card */}
                 <TouchableOpacity
                     style={styles.card}
-                    onPress={() => navigation.navigate('Innovators')}
+                    onPress={() => navigation.navigate('I N N O V A T I O N S')}
                 >
                     <Image
                         source={{
@@ -125,7 +125,7 @@ const HomeScreen: React.FC = () => {
                         }}
                         style={styles.innovatorImage}
                     />
-                    <Text style={styles.cardTitle}>Innovators</Text>
+                    <Text style={styles.cardTitle}>Innovations</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -168,11 +168,26 @@ const styles = StyleSheet.create({
     card: {
         width: '45%',
         backgroundColor: '#f0f0f0',
+        borderColor: '#099fe1',
+        borderWidth: 1, // Ensure border is visible
         borderRadius: 10,
         marginBottom: 20,
+        marginTop: 50,
         alignItems: 'center',
         paddingVertical: 20,
-    },
+        
+        // Shadow properties for iOS
+        shadowColor: '#000', // Color of the shadow
+        shadowOffset: {
+            width: 0, // Horizontal offset
+            height: 2, // Vertical offset
+        },
+        shadowOpacity: 0.25, // Opacity of the shadow
+        shadowRadius: 3.5, // Blur radius of the shadow
+    
+        // Elevation for Android
+        elevation: 5, // Control the depth of the shadow
+    },    
     placeholderImage: {
         width: 100,
         height: 100,
